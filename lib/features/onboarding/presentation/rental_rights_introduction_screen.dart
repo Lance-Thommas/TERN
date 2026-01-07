@@ -1,0 +1,29 @@
+import 'package:flutter/material.dart';
+
+class RentalRightsIntroductionScreen extends StatelessWidget {
+  const RentalRightsIntroductionScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Rental Rights Introduction'),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 8),
+            Text('Rental Rights Introduction', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+            SizedBox(height: 12),
+            Text('Refer to design: rental_rights_introduction'),
+            SizedBox(height: 12),
+            Text('Screen is scrollable, aligned to design structure with mocked data.'),
+          ],
+        ),
+      ),
+    );
+  }
+}

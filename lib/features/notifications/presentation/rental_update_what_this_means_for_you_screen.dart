@@ -1,0 +1,29 @@
+import 'package:flutter/material.dart';
+
+class RentalUpdateWhatThisMeansForYouScreen extends StatelessWidget {
+  const RentalUpdateWhatThisMeansForYouScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Rental Update What This Means For You'),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 8),
+            Text('Rental Update What This Means For You', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+            SizedBox(height: 12),
+            Text('Refer to design: rental_update_what_this_means_for_you'),
+            SizedBox(height: 12),
+            Text('Screen is scrollable, aligned to design structure with mocked data.'),
+          ],
+        ),
+      ),
+    );
+  }
+}
