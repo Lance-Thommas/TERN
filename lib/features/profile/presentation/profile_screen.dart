@@ -7,7 +7,20 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
+      appBar: AppBar(
+        title: const Text('Profile'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
@@ -25,13 +38,13 @@ class ProfileScreen extends StatelessWidget {
               leading: const Icon(Icons.history),
               title: const Text('Tenancy history'),
               subtitle: const Text('Continuity record (mocked).'),
-              onTap: () => context.go('/app/profile/history'),
+              onTap: () => context.push('/app/profile/history'),
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.mail_outline),
               title: const Text('Notifications'),
-              onTap: () => context.go('/app/notifications'),
+              onTap: () => context.push('/app/notifications'),
             ),
             const Spacer(),
             SizedBox(

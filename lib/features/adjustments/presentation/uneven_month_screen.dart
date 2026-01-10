@@ -8,7 +8,20 @@ class UnevenMonthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('Timeline Status')),
+      appBar: AppBar(
+        title: const Text('Timeline Status'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -82,7 +95,7 @@ class UnevenMonthScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () => context.go('/app/timeline'),
+                      onPressed: () => context.push('/app/timeline'),
                       child: const Text('Yes, keep things smooth'),
                     ),
                   ),
@@ -90,7 +103,7 @@ class UnevenMonthScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton(
-                      onPressed: () => context.go('/app/timeline'),
+                      onPressed: () => context.push('/app/timeline'),
                       child: const Text("No thanks, I'll handle it"),
                     ),
                   ),

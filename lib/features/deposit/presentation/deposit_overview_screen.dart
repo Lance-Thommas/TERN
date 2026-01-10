@@ -8,7 +8,20 @@ class DepositOverviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('Deposit Overview')),
+      appBar: AppBar(
+        title: const Text('Deposit Overview'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -166,7 +179,7 @@ class DepositOverviewScreen extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () => context.go('/app/timeline/deposit/preview'),
+                          onPressed: () => context.push('/app/timeline/deposit/preview'),
                           child: const Text('View Coverage Details'),
                         ),
                       ),

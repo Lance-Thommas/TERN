@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class FirstTimelineView1Screen extends StatelessWidget {
   const FirstTimelineView1Screen({super.key});
@@ -7,6 +8,16 @@ class FirstTimelineView1Screen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
+        ),
         title: const Text('First Timeline View 1'),
         centerTitle: true,
       ),

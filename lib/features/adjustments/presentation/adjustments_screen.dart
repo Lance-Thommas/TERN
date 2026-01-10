@@ -7,7 +7,20 @@ class AdjustmentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Adjustments')),
+      appBar: AppBar(
+        title: const Text('Adjustments'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
@@ -16,14 +29,14 @@ class AdjustmentsScreen extends StatelessWidget {
               title: 'Uneven month',
               subtitle: 'Offer to keep things smooth this month.',
               icon: Icons.balance,
-              onTap: () => context.go('/app/adjustments/uneven-month'),
+              onTap: () => context.push('/app/adjustments/uneven-month'),
             ),
             const SizedBox(height: 12),
             _AdjustmentCard(
               title: 'Clear exits reduce loss',
               subtitle: 'Design calm endings with clear costs.',
               icon: Icons.logout,
-              onTap: () => context.go('/app/adjustments/clear-exits'),
+              onTap: () => context.push('/app/adjustments/clear-exits'),
             ),
           ],
         ),

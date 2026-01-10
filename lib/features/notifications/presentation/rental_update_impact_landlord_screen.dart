@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class RentalUpdateImpactLandlordScreen extends StatelessWidget {
   const RentalUpdateImpactLandlordScreen({super.key});
@@ -7,6 +8,16 @@ class RentalUpdateImpactLandlordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
+        ),
         title: const Text('Rental Update Impact (Landlord)'),
         centerTitle: true,
       ),

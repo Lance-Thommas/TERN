@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class UnevenMonthAdjustmentOfferScreen extends StatelessWidget {
   const UnevenMonthAdjustmentOfferScreen({super.key});
@@ -7,6 +8,16 @@ class UnevenMonthAdjustmentOfferScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
+        ),
         title: const Text('Uneven Month Adjustment Offer'),
         centerTitle: true,
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class EarlyExitPlanTransition2Screen extends StatelessWidget {
   const EarlyExitPlanTransition2Screen({super.key});
@@ -7,6 +8,16 @@ class EarlyExitPlanTransition2Screen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
+        ),
         title: const Text('Early Exit Plan Transition 2'),
         centerTitle: true,
       ),

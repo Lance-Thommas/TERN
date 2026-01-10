@@ -29,12 +29,12 @@ class BasicOnboardingScreen extends StatelessWidget {
           PlaceholderAction(
             label: 'Continue',
             isPrimary: true,
-            onPressed: () => context.go(nextPath!),
+            onPressed: () => context.push(nextPath!),
           ),
         if (secondaryPath != null)
           PlaceholderAction(
             label: 'Skip',
-            onPressed: () => context.go(secondaryPath!),
+            onPressed: () => context.push(secondaryPath!),
           ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class TernProtectsContinuityLandlordScreen extends StatelessWidget {
   const TernProtectsContinuityLandlordScreen({super.key});
@@ -7,6 +8,16 @@ class TernProtectsContinuityLandlordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
+        ),
         title: const Text('Tern Protects Continuity Landlord'),
         centerTitle: true,
       ),

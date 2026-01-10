@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class WelcomeToTernLandlordSideScreen extends StatelessWidget {
   const WelcomeToTernLandlordSideScreen({super.key});
@@ -7,6 +8,16 @@ class WelcomeToTernLandlordSideScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
+        ),
         title: const Text('Welcome To Tern Landlord Side'),
         centerTitle: true,
       ),

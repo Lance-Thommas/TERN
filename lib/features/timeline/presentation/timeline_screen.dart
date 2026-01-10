@@ -16,6 +16,17 @@ class TimelineScreen extends StatelessWidget {
               .titleMedium
               ?.copyWith(letterSpacing: 4, fontWeight: FontWeight.w700),
         ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -23,7 +34,7 @@ class TimelineScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _RuleUpdateCard(onTap: () => context.go('/app/timeline/rule-update')),
+              _RuleUpdateCard(onTap: () => context.push('/app/timeline/rule-update')),
               const SizedBox(height: 18),
               Center(
                 child: Column(
@@ -71,7 +82,7 @@ class TimelineScreen extends StatelessWidget {
                 subtitle: 'Nov 1, 2023',
                 status: _TimelineStatus.upcoming,
                 trailing: ElevatedButton.icon(
-                  onPressed: () => context.go('/app/adjustments/uneven-month'),
+                  onPressed: () => context.push('/app/adjustments/uneven-month'),
                   icon: const Icon(Icons.tune, size: 18),
                   label: const Text('Adjustments'),
                 ),
@@ -84,9 +95,9 @@ class TimelineScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               _ActionGrid(
-                onDeposit: () => context.go('/app/timeline/deposit'),
-                onRenewal: () => context.go('/app/timeline/renewal'),
-                onTransition: () => context.go('/app/transition/early-exit'),
+                onDeposit: () => context.push('/app/timeline/deposit'),
+                onRenewal: () => context.push('/app/timeline/renewal'),
+                onTransition: () => context.push('/app/transition/early-exit'),
               ),
             ],
           ),
@@ -290,7 +301,7 @@ class _ActionGrid extends StatelessWidget {
           title: 'Notifications',
           subtitle: 'Rental updates',
           icon: Icons.notifications,
-          onTap: () => context.go('/app/notifications'),
+          onTap: () => context.push('/app/notifications'),
         ),
       ],
     );

@@ -14,7 +14,20 @@ class RenewalScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Renewal Decision')),
+      appBar: AppBar(
+        title: const Text('Renewal Decision'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -40,14 +53,14 @@ class RenewalScreen extends StatelessWidget {
                 style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.secondary),
               ),
               const SizedBox(height: 22),
-              _PrimaryCard(onRenew: () => context.go('/app/timeline')),
+              _PrimaryCard(onRenew: () => context.push('/app/timeline')),
               const SizedBox(height: 16),
               _SecondaryCard(
                 title: 'Plan a Transition',
                 icon: Icons.calendar_month,
                 body: 'Need flexibility? Structure a move-out plan that works for your timeline.',
                 ctaLabel: 'Explore Options',
-                onTap: () => context.go('/app/renewal/options'),
+                onTap: () => context.push('/app/renewal/options'),
               ),
               const SizedBox(height: 12),
               _SecondaryCard(
@@ -55,7 +68,7 @@ class RenewalScreen extends StatelessWidget {
                 icon: Icons.logout,
                 body: 'End your tenancy at the conclusion of your current term.',
                 ctaLabel: 'Initiate Exit',
-                onTap: () => context.go('/app/transition/early-exit'),
+                onTap: () => context.push('/app/transition/early-exit'),
                 isOutlined: true,
               ),
               const SizedBox(height: 20),
