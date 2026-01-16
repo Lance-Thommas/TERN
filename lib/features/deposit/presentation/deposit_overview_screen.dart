@@ -9,17 +9,18 @@ class DepositOverviewScreen extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          // TODO(remove): temporary screen acronym during early development
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Text('DO', style: const TextStyle(fontWeight: FontWeight.w700)),
+          ),
+        ],
         title: const Text('Deposit Overview'),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-          if (context.canPop()) {
-            context.pop();
-          } else {
-            context.go('/');
-          }
-        },
+          onPressed: () => context.go('/dev'),
         ),
       ),
       body: SafeArea(

@@ -16,21 +16,22 @@ class LeaseConnectionScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: _bg,
       appBar: AppBar(
+        actions: [
+          // TODO(remove): temporary screen acronym during early development
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Text('LC', style: const TextStyle(fontWeight: FontWeight.w700)),
+          ),
+          const SizedBox(width: 48),
+        ],
         backgroundColor: _bg,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              context.go('/');
-            }
-          },
+          onPressed: () => context.go('/dev'),
         ),
         title: const Text('Lease Connection'),
         centerTitle: true,
-        actions: const [SizedBox(width: 48)],
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {

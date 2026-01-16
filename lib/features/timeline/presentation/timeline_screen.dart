@@ -4,101 +4,95 @@ import 'package:go_router/go_router.dart';
 class TimelineScreen extends StatelessWidget {
   const TimelineScreen({super.key});
 
+  static const _bg = Color(0xFFF6F8F8);
+  static const _line = Color(0xFFDbe6e5);
+
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final primary = theme.colorScheme.primary;
+
+    final entries = <_TimelineEntry>[
+      _TimelineEntry(
+        icon: Icons.check_circle,
+        title: 'Lease Start',
+        subtitle: 'Jan 1, 2023',
+        status: _TimelineStatus.past,
+      ),
+      _TimelineEntry(
+        icon: Icons.check_circle,
+        title: 'Rent paid — on time',
+        subtitle: 'Automatic payment complete',
+        status: _TimelineStatus.current,
+        pill: 'Today',
+        highlight: true,
+      ),
+      _TimelineEntry(
+        icon: Icons.gavel,
+        title: 'Rental rule update effective today',
+        subtitle: null,
+        status: _TimelineStatus.future,
+        actionLabel: 'View update',
+        onTap: () => context.push('/app/timeline/rule-update'),
+      ),
+      _TimelineEntry(
+        icon: Icons.schedule,
+        title: 'Next Rent Window',
+        subtitle: 'Nov 1, 2023',
+        status: _TimelineStatus.future,
+      ),
+      _TimelineEntry(
+        icon: Icons.flag,
+        title: 'Lease End Date',
+        subtitle: 'Dec 31, 2023',
+        status: _TimelineStatus.future,
+      ),
+    ];
+
     return Scaffold(
+      backgroundColor: _bg,
       appBar: AppBar(
+        backgroundColor: _bg,
+        elevation: 0,
+        actions: const [
+          // TODO(remove): temporary screen acronym during early development
+          Padding(
+            padding: EdgeInsets.only(right: 12),
+            child: Text('T', style: TextStyle(fontWeight: FontWeight.w700)),
+          ),
+        ],
         title: Text(
           'TERN',
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium
-              ?.copyWith(letterSpacing: 4, fontWeight: FontWeight.w700),
+          style: theme.textTheme.titleMedium?.copyWith(letterSpacing: 4, fontWeight: FontWeight.w700),
         ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-          if (context.canPop()) {
-            context.pop();
-          } else {
-            context.go('/');
-          }
-        },
+          onPressed: () => context.go('/dev'),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _RuleUpdateCard(onTap: () => context.push('/app/timeline/rule-update')),
-              const SizedBox(height: 18),
-              Center(
-                child: Column(
-                  children: [
-                    Text(
-                      'Everything is on track.',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall
-                          ?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.w800),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Rent paid. You are covered until Nov 1, 2023.',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: colorScheme.secondary),
-                    ),
-                  ],
-                ),
+              _RuleBanner(primary: primary, onTap: () => context.push('/app/timeline/rule-update')),
+              const SizedBox(height: 16),
+              _HeroSection(
+                title: 'Everything is on track.',
+                subtitle: 'Rent paid. You are covered until Nov 1, 2023.',
+                primary: primary,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               _ProgressSection(
                 label: 'Annual Progress',
                 valueLabel: '150 Days Elapsed',
                 progress: 0.42,
+                primary: primary,
               ),
-              const SizedBox(height: 24),
-              _TimelineRow(
-                icon: Icons.check_circle,
-                title: 'Lease Start',
-                subtitle: 'Jan 1, 2023',
-                status: _TimelineStatus.completed,
-              ),
-              _TimelineRow(
-                icon: Icons.check_circle,
-                title: 'Rent paid — on time',
-                subtitle: 'Automatic payment complete',
-                status: _TimelineStatus.current,
-              ),
-              _TimelineRow(
-                icon: Icons.schedule,
-                title: 'Next Rent Window',
-                subtitle: 'Nov 1, 2023',
-                status: _TimelineStatus.upcoming,
-                trailing: ElevatedButton.icon(
-                  onPressed: () => context.push('/app/adjustments/uneven-month'),
-                  icon: const Icon(Icons.tune, size: 18),
-                  label: const Text('Adjustments'),
-                ),
-              ),
-              _TimelineRow(
-                icon: Icons.flag,
-                title: 'Lease End Date',
-                subtitle: 'Dec 31, 2023',
-                status: _TimelineStatus.upcoming,
-              ),
-              const SizedBox(height: 20),
-              _ActionGrid(
-                onDeposit: () => context.push('/app/timeline/deposit'),
-                onRenewal: () => context.push('/app/timeline/renewal'),
-                onTransition: () => context.push('/app/transition/early-exit'),
-              ),
+              const SizedBox(height: 18),
+              _TimelineList(entries: entries, lineColor: _line, primary: primary),
             ],
           ),
         ),
@@ -107,63 +101,112 @@ class TimelineScreen extends StatelessWidget {
   }
 }
 
-class _RuleUpdateCard extends StatelessWidget {
-  const _RuleUpdateCard({required this.onTap});
-
+class _RuleBanner extends StatelessWidget {
+  const _RuleBanner({required this.primary, required this.onTap});
+  final Color primary;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Card(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Row(
-            children: [
-              Icon(Icons.flag, color: theme.colorScheme.secondary),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'A rental rule has changed that may affect your lease.',
-                  style: theme.textTheme.bodyMedium,
-                ),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: const Color(0xFFE8EAEE),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(Icons.flag, color: Color(0xFF64748B), size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'A rental rule has changed that may affect your lease.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: const Color(0xFF475569), height: 1.25),
               ),
-              const Icon(Icons.chevron_right),
-            ],
-          ),
+            ),
+            const SizedBox(width: 8),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text('View', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.3, color: Color(0xFF475569))),
+                SizedBox(width: 2),
+                Icon(Icons.chevron_right, size: 16, color: Color(0xFF475569)),
+              ],
+            ),
+          ],
         ),
       ),
+    );
+  }
+}
+
+class _HeroSection extends StatelessWidget {
+  const _HeroSection({required this.title, required this.subtitle, required this.primary});
+  final String title;
+  final String subtitle;
+  final Color primary;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Center(
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              color: primary,
+              fontWeight: FontWeight.w800,
+              height: 1.1,
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Center(
+          child: SizedBox(
+            width: 300,
+            child: Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyLarge?.copyWith(color: const Color(0xFF618986), height: 1.3),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
 class _ProgressSection extends StatelessWidget {
-  const _ProgressSection({
-    required this.label,
-    required this.valueLabel,
-    required this.progress,
-  });
-
+  const _ProgressSection({required this.label, required this.valueLabel, required this.progress, required this.primary});
   final String label;
   final String valueLabel;
   final double progress;
+  final Color primary;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(label, style: theme.textTheme.titleMedium),
+            Text(label, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
             Text(
               valueLabel,
-              style: theme.textTheme.labelMedium?.copyWith(color: theme.colorScheme.primary),
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: primary,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.3,
+                  ),
             ),
           ],
         ),
@@ -171,10 +214,10 @@ class _ProgressSection extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: LinearProgressIndicator(
-            minHeight: 10,
+            minHeight: 6,
             value: progress,
-            color: theme.colorScheme.primary,
-            backgroundColor: theme.dividerColor,
+            color: primary,
+            backgroundColor: const Color(0xFFDbe6e5),
           ),
         ),
       ],
@@ -182,181 +225,183 @@ class _ProgressSection extends StatelessWidget {
   }
 }
 
-enum _TimelineStatus { completed, current, upcoming }
+enum _TimelineStatus { past, current, future }
 
-class _TimelineRow extends StatelessWidget {
-  const _TimelineRow({
+class _TimelineEntry {
+  const _TimelineEntry({
     required this.icon,
     required this.title,
-    required this.subtitle,
     required this.status,
-    this.trailing,
+    this.subtitle,
+    this.pill,
+    this.highlight = false,
+    this.actionLabel,
+    this.onTap,
   });
 
   final IconData icon;
   final String title;
-  final String subtitle;
+  final String? subtitle;
   final _TimelineStatus status;
-  final Widget? trailing;
+  final String? pill;
+  final bool highlight;
+  final String? actionLabel;
+  final VoidCallback? onTap;
+}
+
+class _TimelineList extends StatelessWidget {
+  const _TimelineList({required this.entries, required this.lineColor, required this.primary});
+
+  final List<_TimelineEntry> entries;
+  final Color lineColor;
+  final Color primary;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    Color iconColor;
-    switch (status) {
-      case _TimelineStatus.completed:
-        iconColor = colorScheme.primary;
-        break;
-      case _TimelineStatus.current:
-        iconColor = colorScheme.primary;
-        break;
-      case _TimelineStatus.upcoming:
-        iconColor = colorScheme.secondary;
-        break;
+    final currentIndex = entries.indexWhere((e) => e.status == _TimelineStatus.current);
+    return Column(
+      children: [
+        for (var i = 0; i < entries.length; i++)
+          _TimelineItem(
+            entry: entries[i],
+            isFirst: i == 0,
+            isLast: i == entries.length - 1,
+            currentIndex: currentIndex >= 0 ? currentIndex : 0,
+            index: i,
+            lineColor: lineColor,
+            primary: primary,
+          ),
+      ],
+    );
+  }
+}
+
+class _TimelineItem extends StatelessWidget {
+  const _TimelineItem({
+    required this.entry,
+    required this.isFirst,
+    required this.isLast,
+    required this.currentIndex,
+    required this.index,
+    required this.lineColor,
+    required this.primary,
+  });
+
+  final _TimelineEntry entry;
+  final bool isFirst;
+  final bool isLast;
+  final int currentIndex;
+  final int index;
+  final Color lineColor;
+  final Color primary;
+
+  Color get _topLineColor => isFirst ? Colors.transparent : (index <= currentIndex ? primary.withValues(alpha: 0.3) : lineColor);
+  Color get _bottomLineColor => isLast ? Colors.transparent : (index < currentIndex ? primary.withValues(alpha: 0.3) : lineColor);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isCurrent = entry.status == _TimelineStatus.current;
+    final isPast = entry.status == _TimelineStatus.past;
+
+    Widget icon = Icon(entry.icon, color: isPast || isCurrent ? primary : const Color(0xFF9CAEA9), size: 22);
+    if (entry.icon == Icons.gavel) {
+      icon = Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(color: const Color(0xFFEEEFF2), borderRadius: BorderRadius.circular(8)),
+        child: Icon(entry.icon, size: 16, color: const Color(0xFF6B7280)),
+      );
     }
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 14),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardTheme.color,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Theme.of(context).dividerColor),
-      ),
+    return Padding(
+      padding: EdgeInsets.only(bottom: isLast ? 0 : 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: colorScheme.primary.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(12),
+          SizedBox(
+            width: 38,
+            child: Column(
+              children: [
+                Container(height: 16, width: 2, color: _topLineColor),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (isCurrent)
+                      Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(color: primary.withValues(alpha: 0.1), shape: BoxShape.circle),
+                      ),
+                    if (isCurrent)
+                      Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(color: primary.withValues(alpha: 0.12), shape: BoxShape.circle),
+                      ),
+                    icon,
+                  ],
+                ),
+                Container(height: 48, width: 2, color: _bottomLineColor),
+              ],
             ),
-            child: Icon(icon, color: iconColor),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 6),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: Theme.of(context).textTheme.titleSmall),
-                const SizedBox(height: 4),
+                if (entry.pill != null)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(entry.pill!, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Color(0xFF11D4C4), letterSpacing: 0.3)),
+                  ),
                 Text(
-                  subtitle,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: colorScheme.secondary),
+                  entry.title,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: entry.highlight || isCurrent ? primary : const Color(0xFF111817),
+                  ),
                 ),
+                if (entry.subtitle != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      entry.subtitle!,
+                      style: theme.textTheme.bodyMedium?.copyWith(color: const Color(0xFF618986), fontWeight: isCurrent ? FontWeight.w600 : FontWeight.w400),
+                    ),
+                  ),
+                if (entry.actionLabel != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: OutlinedButton(
+                      onPressed: entry.onTap,
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        backgroundColor: const Color(0xFFEEEFF2),
+                        foregroundColor: const Color(0xFF475569),
+                        side: BorderSide.none,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(entry.actionLabel!, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                          const SizedBox(width: 6),
+                          const Icon(Icons.chevron_right, size: 16),
+                        ],
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
-          if (trailing != null) trailing!,
         ],
-      ),
-    );
-  }
-}
-
-class _ActionGrid extends StatelessWidget {
-  const _ActionGrid({
-    required this.onDeposit,
-    required this.onRenewal,
-    required this.onTransition,
-  });
-
-  final VoidCallback onDeposit;
-  final VoidCallback onRenewal;
-  final VoidCallback onTransition;
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      physics: const NeverScrollableScrollPhysics(),
-      children: [
-        _ActionTile(
-          title: 'Deposit',
-          subtitle: 'Coverage & maintenance',
-          icon: Icons.account_balance_wallet,
-          onTap: onDeposit,
-        ),
-        _ActionTile(
-          title: 'Renewal',
-          subtitle: 'Decide early',
-          icon: Icons.event_repeat,
-          onTap: onRenewal,
-        ),
-        _ActionTile(
-          title: 'Transitions',
-          subtitle: 'Early exit or reclaim',
-          icon: Icons.logout,
-          onTap: onTransition,
-        ),
-        _ActionTile(
-          title: 'Notifications',
-          subtitle: 'Rental updates',
-          icon: Icons.notifications,
-          onTap: () => context.push('/app/notifications'),
-        ),
-      ],
-    );
-  }
-}
-
-class _ActionTile extends StatelessWidget {
-  const _ActionTile({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.onTap,
-  });
-
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardTheme.color,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Theme.of(context).dividerColor),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: colorScheme.primary.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: colorScheme.primary),
-            ),
-            const SizedBox(height: 10),
-            Text(title, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: colorScheme.secondary),
-            ),
-          ],
-        ),
       ),
     );
   }

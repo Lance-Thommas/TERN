@@ -19,15 +19,16 @@ class _CreateYourAccountScreenState extends State<CreateYourAccountScreen> {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
+        actions: [
+          // TODO(remove): temporary screen acronym during early development
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Text('CYA', style: const TextStyle(fontWeight: FontWeight.w700)),
+          ),
+        ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-          if (context.canPop()) {
-            context.pop();
-          } else {
-            context.go('/');
-          }
-        },
+          onPressed: () => context.go('/dev'),
         ),
         title: const Text('Create Your Account'),
         centerTitle: true,

@@ -13,18 +13,19 @@ class ConnectBankAccountScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: _bg,
       appBar: AppBar(
+        actions: [
+          // TODO(remove): temporary screen acronym during early development
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Text('CBA', style: const TextStyle(fontWeight: FontWeight.w700)),
+          ),
+        ],
         backgroundColor: _bg,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              context.go('/');
-            }
-          },
+          onPressed: () => context.go('/dev'),
         ),
         title: ShaderMask(
           shaderCallback: (rect) => const LinearGradient(
@@ -98,7 +99,7 @@ class ConnectBankAccountScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton.icon(
-                  onPressed: () => context.go('/app/timeline'),
+                  onPressed: () => context.go('/app/home'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _primary,
                     foregroundColor: const Color(0xFF102220),

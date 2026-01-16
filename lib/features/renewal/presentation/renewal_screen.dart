@@ -15,17 +15,18 @@ class RenewalScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          // TODO(remove): temporary screen acronym during early development
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Text('R', style: const TextStyle(fontWeight: FontWeight.w700)),
+          ),
+        ],
         title: const Text('Renewal Decision'),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-          if (context.canPop()) {
-            context.pop();
-          } else {
-            context.go('/');
-          }
-        },
+          onPressed: () => context.go('/dev'),
         ),
       ),
       body: SafeArea(

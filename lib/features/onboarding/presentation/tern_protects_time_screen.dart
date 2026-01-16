@@ -13,18 +13,19 @@ class TernProtectsTimeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: _bg,
       appBar: AppBar(
+        actions: [
+          // TODO(remove): temporary screen acronym during early development
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Text('TPT', style: const TextStyle(fontWeight: FontWeight.w700)),
+          ),
+        ],
         backgroundColor: _bg,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-          if (context.canPop()) {
-            context.pop();
-          } else {
-            context.go('/');
-          }
-        },
+          onPressed: () => context.go('/dev'),
         ),
         title: const Text(''),
       ),
