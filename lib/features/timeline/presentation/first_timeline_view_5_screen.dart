@@ -40,7 +40,13 @@ class FirstTimelineView5Screen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/timeline');
+            }
+          },
         ),
         title: Text('TERN', style: theme.textTheme.titleMedium?.copyWith(letterSpacing: 4, fontWeight: FontWeight.w700)),
         centerTitle: true,

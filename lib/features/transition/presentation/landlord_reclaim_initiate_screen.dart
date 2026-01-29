@@ -17,7 +17,13 @@ class LandlordReclaimInitiateScreen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/transition/landlord');
+            }
+          },
         ),
         title: const Text('Landlord Reclaim Initiate'),
         centerTitle: true,

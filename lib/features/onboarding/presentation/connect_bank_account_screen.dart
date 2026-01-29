@@ -25,7 +25,13 @@ class ConnectBankAccountScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/welcome-to-tern');
+            }
+          },
         ),
         title: ShaderMask(
           shaderCallback: (rect) => const LinearGradient(
@@ -99,7 +105,7 @@ class ConnectBankAccountScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton.icon(
-                  onPressed: () => context.go('/app/home'),
+                  onPressed: () => context.push('/onboarding/lease-connection'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _primary,
                     foregroundColor: const Color(0xFF102220),

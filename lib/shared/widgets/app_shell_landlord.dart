@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class AppShell extends StatelessWidget {
-  const AppShell({super.key, required this.navigationShell});
+class AppShellLandlord extends StatelessWidget {
+  const AppShellLandlord({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 
@@ -19,8 +19,8 @@ class AppShell extends StatelessWidget {
         onDestinationSelected: _goBranch,
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_filled), label: 'Home'),
-          NavigationDestination(icon: Icon(Icons.timeline), label: 'Timeline'),
-          NavigationDestination(icon: Icon(Icons.tune), label: 'Adjustments'),
+          NavigationDestination(icon: Icon(Icons.apartment), label: 'Portfolio'),
+          NavigationDestination(icon: Icon(Icons.rule), label: 'Decisions'),
           NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

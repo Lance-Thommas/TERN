@@ -16,7 +16,13 @@ class LandlordTransitionSignalScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/notifications');
+            }
+          },
         ),
         title: ShaderMask(
           shaderCallback: (bounds) => const LinearGradient(

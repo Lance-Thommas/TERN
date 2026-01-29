@@ -28,7 +28,13 @@ class LeaseConnectionScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/welcome-to-tern');
+            }
+          },
         ),
         title: const Text('Lease Connection'),
         centerTitle: true,
@@ -254,7 +260,7 @@ class _BottomSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
               child: ElevatedButton.icon(
-                onPressed: () => context.push('/onboarding/connect-bank'),
+                onPressed: () => context.push('/app/timeline'),
                 label: const Text('Confirm Lease Details'),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(54),

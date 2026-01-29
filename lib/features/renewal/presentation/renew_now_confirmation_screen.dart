@@ -30,7 +30,13 @@ class _RenewNowConfirmationScreenState extends State<RenewNowConfirmationScreen>
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/timeline');
+            }
+          },
         ),
         title: const Text('Renew Now'),
         centerTitle: true,
@@ -134,7 +140,7 @@ class _RenewNowConfirmationScreenState extends State<RenewNowConfirmationScreen>
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: _agreed ? () {} : null,
+                      onPressed: _agreed ? () => context.go('/app/timeline') : null,
                       style: ElevatedButton.styleFrom(
                                 backgroundColor: _renewConfirmPrimary,
                         foregroundColor: Colors.white,

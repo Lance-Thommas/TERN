@@ -1,4 +1,3 @@
-import 'package:flutter_application_1/features/adjustments/presentation/adjustments_screen.dart';
 import 'package:flutter_application_1/features/adjustments/presentation/uneven_month_screen.dart';
 import 'package:flutter_application_1/features/adjustments/presentation/uneven_month_adjustment_offer_screen.dart';
 import 'package:flutter_application_1/features/adjustments/presentation/clear_exits_reduce_loss_landlord_screen.dart';
@@ -11,6 +10,7 @@ import 'package:flutter_application_1/features/dev/presentation/developer_nav_sc
 import 'package:flutter_application_1/features/landlord/presentation/landlord_portfolio_screen.dart';
 import 'package:flutter_application_1/features/landlord/presentation/landlord_portfolio_timeline_1_screen.dart';
 import 'package:flutter_application_1/features/landlord/presentation/landlord_portfolio_timeline_2_screen.dart';
+import 'package:flutter_application_1/features/landlord/presentation/landlord_home_screen.dart';
 import 'package:flutter_application_1/features/home/presentation/home_screen.dart';
 import 'package:flutter_application_1/features/notifications/presentation/notifications_screen.dart';
 import 'package:flutter_application_1/features/notifications/presentation/rental_update_impact_landlord_screen.dart';
@@ -24,6 +24,7 @@ import 'package:flutter_application_1/features/landlord/presentation/landlord_re
 import 'package:flutter_application_1/features/landlord/presentation/lease_closure_landlord_screen.dart';
 import 'package:flutter_application_1/features/landlord/presentation/tenancy_history_landlord_screen.dart';
 import 'package:flutter_application_1/features/landlord/presentation/property_and_lease_setup_landlord_screen.dart';
+import 'package:flutter_application_1/features/landlord/presentation/property_and_lease_setup_methods_landlord_screen.dart';
 import 'package:flutter_application_1/features/transition/presentation/after_exit_continuity_record_screen.dart';
 import 'package:flutter_application_1/features/transition/presentation/early_exit_plan_transition_1_screen.dart';
 import 'package:flutter_application_1/features/transition/presentation/early_exit_plan_transition_2_screen.dart';
@@ -57,17 +58,18 @@ import 'package:flutter_application_1/features/timeline/presentation/first_timel
 import 'package:flutter_application_1/features/timeline/presentation/first_timeline_view_5_screen.dart';
 import 'package:flutter_application_1/features/transition/presentation/transition_screen.dart';
 import 'package:flutter_application_1/shared/widgets/app_shell.dart';
+import 'package:flutter_application_1/shared/widgets/app_shell_landlord.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/dev',
+    initialLocation: '/',
     routes: [
       GoRoute(
         path: '/',
         name: 'root',
-        builder: (context, state) => const WelcomeToTernScreen(),
+        builder: (context, state) => const WelcomeScreen(),
       ),
       GoRoute(
         path: '/dev',
@@ -135,9 +137,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const CreateYourAccountLandlordScreen(),
       ),
       GoRoute(
+        path: '/onboarding/landlord/property-lease-setup',
+        name: 'property-lease-setup-landlord',
+        builder: (context, state) => const PropertyAndLeaseSetupMethodsLandlordScreen(),
+      ),
+      GoRoute(
         path: '/onboarding/property-setup',
         name: 'property-setup-landlord',
-        builder: (context, state) => const PropertyAndLeaseSetupLandlordScreen(),
+        builder: (context, state) => const SetupFirstPropertyLandlordScreen(),
       ),
       GoRoute(
         path: '/onboarding/lease-connection',
@@ -164,6 +171,54 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/onboarding/landlord/welcome-side',
         name: 'welcome-landlord-side',
         builder: (context, state) => const WelcomeToTernLandlordSideScreen(),
+      ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) => AppShellLandlord(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/app/landlord/home',
+                name: 'landlord-home',
+                builder: (context, state) => const LandlordHomeScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/app/landlord/portfolio',
+                name: 'landlord-portfolio',
+                builder: (context, state) => const LandlordPortfolioTimeline1Screen(),
+                routes: [
+                  GoRoute(
+                    path: 'timeline-2',
+                    name: 'landlord-portfolio-timeline-2',
+                    builder: (context, state) => const LandlordPortfolioTimeline2Screen(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/app/landlord/decisions',
+                name: 'landlord-decisions',
+                builder: (context, state) => const LandlordDecisionsScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/app/landlord/profile',
+                name: 'landlord-profile',
+                builder: (context, state) => const ProfileScreen(),
+              ),
+            ],
+          ),
+        ],
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) => AppShell(navigationShell: navigationShell),
@@ -242,7 +297,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/app/adjustments',
                 name: 'adjustments',
-                builder: (context, state) => const AdjustmentsScreen(),
+                builder: (context, state) => const UnevenMonthAdjustmentOfferScreen(),
                 routes: [
                   GoRoute(
                     path: 'uneven-month',
@@ -370,6 +425,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const EarlyExitPlanTransition2Screen(),
       ),
       GoRoute(
+        path: '/app/landlord/clear-exits',
+        name: 'landlord-clear-exits',
+        builder: (context, state) => const ClearExitsReduceLossLandlordScreen(),
+      ),
+      GoRoute(
         path: '/app/transition/request-flexibility',
         name: 'transition-flexibility',
         builder: (context, state) => const TransitionRequestFlexibilityScreen(),
@@ -433,21 +493,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/app/transition/continuity-record',
         name: 'continuity-record',
         builder: (context, state) => const AfterExitContinuityRecordScreen(),
-      ),
-      GoRoute(
-        path: '/app/landlord/portfolio',
-        name: 'landlord-portfolio',
-        builder: (context, state) => const LandlordPortfolioScreen(),
-      ),
-      GoRoute(
-        path: '/app/landlord/portfolio/timeline-1',
-        name: 'landlord-portfolio-timeline-1',
-        builder: (context, state) => const LandlordPortfolioTimeline1Screen(),
-      ),
-      GoRoute(
-        path: '/app/landlord/portfolio/timeline-2',
-        name: 'landlord-portfolio-timeline-2',
-        builder: (context, state) => const LandlordPortfolioTimeline2Screen(),
       ),
       GoRoute(
         path: '/app/landlord/reclaim/initiate',

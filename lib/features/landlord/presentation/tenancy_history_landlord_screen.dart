@@ -16,98 +16,100 @@ class TenancyHistoryLandlordScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/landlord/history');
+            }
+          },
         ),
         title: const Text('Tenancy History'),
         centerTitle: true,
       ),
-      body: Stack(
+      body: ListView(
+        padding: const EdgeInsets.only(bottom: 24),
         children: [
-          ListView(
-            padding: const EdgeInsets.only(bottom: 110),
-            children: [
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
-                        colors: [Color(0xFF111817), _thPrimary],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ).createShader(bounds),
-                      child: const Text(
-                        "Your portfolio's continuity record.",
-                        style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: Colors.white),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Unbiased and verified history of your property assets. This record preserves neutrality.',
-                      style: TextStyle(color: Color(0xFF638884), height: 1.4),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              _FilterChips(),
-              const SizedBox(height: 12),
-              _HistoryCard(
-                title: 'Unit 4B, The Highland Lofts',
-                dateRange: 'Mar 2022 – May 2023',
-                tenant: 'Tenant: John D.',
-                status: 'Lease Concluded',
-                statusColor: Colors.grey,
-                duration: '14 Months',
-              ),
-              _HistoryCard(
-                title: '221B Baker Street, Apt 2',
-                dateRange: 'Jan 2020 – Dec 2021',
-                tenant: 'Tenant: Sarah M.',
-                status: 'Transferred',
-                statusColor: _thPrimary,
-                duration: '24 Months',
-              ),
-              _HistoryCard(
-                title: 'The Arches, Studio 5',
-                dateRange: 'Jun 2018 – Dec 2019',
-                tenant: 'Tenant: Alex R.',
-                status: 'Lease Ended',
-                statusColor: Colors.grey,
-                duration: '18 Months',
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E9E8)),
-                  ),
-                  child: Row(
-                    children: const [
-                      Icon(Icons.verified_user, color: Color(0xFF9CA3AF)),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'This record preserves neutrality and does not include subjective tenant scoring.',
-                          style: TextStyle(color: Color(0xFF6B7280), fontSize: 12),
-                        ),
-                      ),
-                    ],
+          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ShaderMask(
+                  shaderCallback: (bounds) => const LinearGradient(
+                    colors: [Color(0xFF111817), _thPrimary],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds),
+                  child: const Text(
+                    "Your portfolio's continuity record.",
+                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: Colors.white),
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
-            ],
+                const SizedBox(height: 8),
+                const Text(
+                  'Unbiased and verified history of your property assets. This record preserves neutrality.',
+                  style: TextStyle(color: Color(0xFF638884), height: 1.4),
+                ),
+              ],
+            ),
           ),
-          const _BottomNav(),
+          const SizedBox(height: 12),
+          _FilterChips(),
+          const SizedBox(height: 12),
+          _HistoryCard(
+            title: 'Unit 4B, The Highland Lofts',
+            dateRange: 'Mar 2022 – May 2023',
+            tenant: 'Tenant: John D.',
+            status: 'Lease Concluded',
+            statusColor: Colors.grey,
+            duration: '14 Months',
+          ),
+          _HistoryCard(
+            title: '221B Baker Street, Apt 2',
+            dateRange: 'Jan 2020 – Dec 2021',
+            tenant: 'Tenant: Sarah M.',
+            status: 'Transferred',
+            statusColor: _thPrimary,
+            duration: '24 Months',
+          ),
+          _HistoryCard(
+            title: 'The Arches, Studio 5',
+            dateRange: 'Jun 2018 – Dec 2019',
+            tenant: 'Tenant: Alex R.',
+            status: 'Lease Ended',
+            statusColor: Colors.grey,
+            duration: '18 Months',
+          ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFE5E9E8)),
+              ),
+              child: Row(
+                children: const [
+                  Icon(Icons.verified_user, color: Color(0xFF9CA3AF)),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'This record preserves neutrality and does not include subjective tenant scoring.',
+                      style: TextStyle(color: Color(0xFF6B7280), fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
         ],
       ),
+      bottomNavigationBar: const _LandlordBottomNav(selectedIndex: 1),
     );
   }
 }
@@ -240,50 +242,38 @@ class _HistoryCard extends StatelessWidget {
   }
 }
 
-class _BottomNav extends StatelessWidget {
-  const _BottomNav();
+class _LandlordBottomNav extends StatelessWidget {
+  const _LandlordBottomNav({this.selectedIndex = 0});
 
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Color(0xFFE5E9E8))),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            _NavItem(icon: Icons.home, label: 'Home'),
-            _NavItem(icon: Icons.history_edu, label: 'History', active: true),
-            _NavItem(icon: Icons.account_balance_wallet, label: 'Wallet'),
-            _NavItem(icon: Icons.person, label: 'Profile'),
-          ],
-        ),
-      ),
-    );
+  final int selectedIndex;
+
+  void _onTap(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        context.go('/app/landlord/home');
+        break;
+      case 1:
+        context.go('/app/landlord/portfolio');
+        break;
+      case 2:
+        context.go('/app/landlord/decisions');
+        break;
+      case 3:
+        context.go('/app/landlord/profile');
+        break;
+    }
   }
-}
-
-class _NavItem extends StatelessWidget {
-  const _NavItem({required this.icon, required this.label, this.active = false});
-  final IconData icon;
-  final String label;
-  final bool active;
 
   @override
   Widget build(BuildContext context) {
-    final color = active ? _thPrimary : const Color(0xFF9CA3AF);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color, size: 22),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: active ? FontWeight.w700 : FontWeight.w500)),
+    return NavigationBar(
+      selectedIndex: selectedIndex,
+      onDestinationSelected: (index) => _onTap(context, index),
+      destinations: const [
+        NavigationDestination(icon: Icon(Icons.home_filled), label: 'Home'),
+        NavigationDestination(icon: Icon(Icons.apartment), label: 'Portfolio'),
+        NavigationDestination(icon: Icon(Icons.rule), label: 'Decisions'),
+        NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
       ],
     );
   }

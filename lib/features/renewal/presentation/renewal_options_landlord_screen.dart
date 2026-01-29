@@ -16,7 +16,13 @@ class RenewalOptionsLandlordScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/timeline');
+            }
+          },
         ),
         title: const Text('Renewal Options'),
         centerTitle: true,
@@ -70,7 +76,7 @@ class RenewalOptionsLandlordScreen extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 20, top: 8),
             child: Center(
               child: TextButton.icon(
-                onPressed: () => context.push('/app/landlord/portfolio/timeline-1'),
+                onPressed: () => context.push('/app/landlord/portfolio'),
                 icon: const Icon(Icons.arrow_forward, color: _roPrimary, size: 18),
                 label: const Text('View Impact & Timelines', style: TextStyle(color: _roPrimary, fontWeight: FontWeight.w700)),
               ),

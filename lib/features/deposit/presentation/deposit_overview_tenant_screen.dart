@@ -23,7 +23,13 @@ class DepositOverviewTenantScreen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/timeline');
+            }
+          },
         ),
         title: const Text('Deposit Overview'),
         centerTitle: true,
@@ -45,7 +51,6 @@ class DepositOverviewTenantScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _BottomNav(),
     );
   }
 }
@@ -300,44 +305,3 @@ class _ActionPanel extends StatelessWidget {
   }
 }
 
-class _BottomNav extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Color(0xFFE3E8E7))),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
-          _BottomItem(icon: Icons.home, label: 'Home', active: false),
-          _BottomItem(icon: Icons.account_balance_wallet, label: 'Deposit', active: true),
-          _BottomItem(icon: Icons.handyman, label: 'Services', active: false),
-          _BottomItem(icon: Icons.person, label: 'Profile', active: false),
-        ],
-      ),
-    );
-  }
-}
-
-class _BottomItem extends StatelessWidget {
-  const _BottomItem({required this.icon, required this.label, this.active = false});
-  final IconData icon;
-  final String label;
-  final bool active;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = active ? _depositPrimary : const Color(0xFF9CAEA9);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color, size: 22),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(fontSize: 10, fontWeight: active ? FontWeight.w700 : FontWeight.w500, color: color)),
-      ],
-    );
-  }
-}

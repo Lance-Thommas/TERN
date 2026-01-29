@@ -23,11 +23,17 @@ class _CreateYourAccountLandlordScreenState extends State<CreateYourAccountLandl
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/welcome-to-tern');
+            }
+          },
         ),
         actions: [
           TextButton(
-            onPressed: () => context.go('/onboarding/property-setup'),
+            onPressed: () => context.go('/onboarding/landlord/property-lease-setup'),
             child: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w700)),
           ),
         ],
@@ -211,7 +217,7 @@ class _SendButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () => context.push('/onboarding/property-setup'),
+        onPressed: () => context.push('/onboarding/landlord/property-lease-setup'),
         style: ElevatedButton.styleFrom(
           backgroundColor: colorScheme.primary,
           padding: const EdgeInsets.symmetric(vertical: 14),

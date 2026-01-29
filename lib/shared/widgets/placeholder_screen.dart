@@ -33,7 +33,13 @@ class PlaceholderScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/welcome-to-tern');
+            }
+          },
         ),
       ),
       body: SafeArea(

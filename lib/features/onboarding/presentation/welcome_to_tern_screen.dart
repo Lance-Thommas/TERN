@@ -26,7 +26,13 @@ class WelcomeToTernScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/welcome-to-tern');
+            }
+          },
         ),
         title: const Text(''),
         centerTitle: true,
@@ -61,7 +67,7 @@ class WelcomeToTernScreen extends StatelessWidget {
                               _GradientHeadline(primary: _primary, primaryDark: _primaryDark, theme: theme),
                               const SizedBox(height: 12),
                               Text(
-                                'TERN helps keep renting calm when timing gets messy.',
+                                'Chello helps keep renting calm when timing gets messy.',
                                 textAlign: TextAlign.center,
                                 style: theme.textTheme.bodyLarge?.copyWith(
                                   color: const Color(0xFF292E38).withValues(alpha: 0.80),
@@ -132,7 +138,7 @@ class _GradientHeadline extends StatelessWidget {
         end: Alignment.bottomRight,
       ).createShader(rect),
       child: Text(
-        'Welcome to TERN',
+        'Welcome to Chello',
         textAlign: TextAlign.center,
         style: theme.textTheme.displaySmall?.copyWith(
           color: Colors.white,

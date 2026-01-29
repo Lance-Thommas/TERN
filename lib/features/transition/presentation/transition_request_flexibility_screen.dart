@@ -23,7 +23,13 @@ class TransitionRequestFlexibilityScreen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/transition/early-exit');
+            }
+          },
         ),
         title: const Text('Transition Flexibility'),
         centerTitle: true,
@@ -170,7 +176,7 @@ class TransitionRequestFlexibilityScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () => context.push('/app/deposit/move-out-settlement'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _trfPrimary,
                         foregroundColor: Colors.white,
@@ -188,22 +194,6 @@ class TransitionRequestFlexibilityScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Color(0xFFDCE5E4))),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
-            _NavItem(icon: Icons.home, label: 'Home'),
-            _NavItem(icon: Icons.swap_horiz, label: 'Transition', active: true),
-            _NavItem(icon: Icons.chat_bubble, label: 'Support'),
-            _NavItem(icon: Icons.person, label: 'Profile'),
-          ],
-        ),
       ),
     );
   }
@@ -292,22 +282,3 @@ class _OptionCard extends StatelessWidget {
   }
 }
 
-class _NavItem extends StatelessWidget {
-  const _NavItem({required this.icon, required this.label, this.active = false});
-  final IconData icon;
-  final String label;
-  final bool active;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = active ? _trfPrimary : const Color(0xFF638882);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color),
-        const SizedBox(height: 2),
-        Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: active ? FontWeight.w700 : FontWeight.w500)),
-      ],
-    );
-  }
-}

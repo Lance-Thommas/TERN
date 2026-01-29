@@ -16,7 +16,13 @@ class WelcomeToTernLandlordSideScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/welcome-to-tern');
+            }
+          },
         ),
         title: const Text('Welcome to TERN'),
         centerTitle: true,
@@ -167,7 +173,7 @@ class _Actions extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => context.push('/onboarding/property-setup'),
+              onPressed: () => context.push('/onboarding/landlord/property-lease-setup'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: _wlPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 14),
@@ -177,6 +183,14 @@ class _Actions extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: TextButton(
+              onPressed: () => context.push('/onboarding/landlord/rent-timing'),
+              child: const Text('See how it works', style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF5F6B6A))),
+            ),
+          ),
+          const SizedBox(height: 8),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(

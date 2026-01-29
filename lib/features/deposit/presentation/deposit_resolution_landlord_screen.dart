@@ -16,7 +16,13 @@ class DepositResolutionLandlordScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/deposit/resolution-landlord');
+            }
+          },
         ),
         title: ShaderMask(
           shaderCallback: (bounds) => const LinearGradient(colors: [_drPrimary, Color(0xFF16B4A4)]).createShader(bounds),

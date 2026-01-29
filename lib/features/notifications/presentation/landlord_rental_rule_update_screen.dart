@@ -16,7 +16,13 @@ class LandlordRentalRuleUpdateScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/notifications');
+            }
+          },
         ),
         title: ShaderMask(
           shaderCallback: (bounds) => const LinearGradient(
@@ -28,40 +34,36 @@ class LandlordRentalRuleUpdateScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 100),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  _HeroCard(),
-                  const SizedBox(height: 16),
-                  _BodyCard(),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.arrow_forward, color: Color(0xFF111817)),
-                      label: const Text('View what this means for you', style: TextStyle(color: Color(0xFF111817), fontWeight: FontWeight.w800)),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _lrPrimary,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        elevation: 2,
-                      ),
-                    ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 24),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              _HeroCard(),
+              const SizedBox(height: 16),
+              _BodyCard(),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.arrow_forward, color: Color(0xFF111817)),
+                  label: const Text('View what this means for you', style: TextStyle(color: Color(0xFF111817), fontWeight: FontWeight.w800)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _lrPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    elevation: 2,
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-          const _BottomNav(),
-        ],
+        ),
       ),
+      bottomNavigationBar: const _LandlordBottomNav(selectedIndex: 2),
     );
   }
 }
@@ -144,50 +146,38 @@ class _BodyCard extends StatelessWidget {
   }
 }
 
-class _BottomNav extends StatelessWidget {
-  const _BottomNav();
+class _LandlordBottomNav extends StatelessWidget {
+  const _LandlordBottomNav({this.selectedIndex = 0});
 
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Color(0xFFE5E9E8))),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            _NavItem(icon: Icons.home_work, label: 'Home'),
-            _NavItem(icon: Icons.notifications, label: 'Alerts', active: true),
-            _NavItem(icon: Icons.account_balance_wallet, label: 'Finance'),
-            _NavItem(icon: Icons.person, label: 'Profile'),
-          ],
-        ),
-      ),
-    );
+  final int selectedIndex;
+
+  void _onTap(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        context.go('/app/landlord/home');
+        break;
+      case 1:
+        context.go('/app/landlord/portfolio');
+        break;
+      case 2:
+        context.go('/app/landlord/decisions');
+        break;
+      case 3:
+        context.go('/app/landlord/profile');
+        break;
+    }
   }
-}
-
-class _NavItem extends StatelessWidget {
-  const _NavItem({required this.icon, required this.label, this.active = false});
-  final IconData icon;
-  final String label;
-  final bool active;
 
   @override
   Widget build(BuildContext context) {
-    final color = active ? _lrPrimary : const Color(0xFF9CA3AF);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color, size: 22),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: active ? FontWeight.w700 : FontWeight.w500)),
+    return NavigationBar(
+      selectedIndex: selectedIndex,
+      onDestinationSelected: (index) => _onTap(context, index),
+      destinations: const [
+        NavigationDestination(icon: Icon(Icons.home_filled), label: 'Home'),
+        NavigationDestination(icon: Icon(Icons.apartment), label: 'Portfolio'),
+        NavigationDestination(icon: Icon(Icons.rule), label: 'Decisions'),
+        NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
       ],
     );
   }

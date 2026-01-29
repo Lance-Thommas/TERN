@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 const _settleBg = Color(0xFFF6F8F8);
 const _settlePrimary = Color(0xFF11D4C4);
 
@@ -206,7 +207,7 @@ class _ReceiptButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
-      onPressed: () {},
+      onPressed: () => context.push('/app/transition/continuity-record'),
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 14),
         side: const BorderSide(color: Color(0xFFE5E9E8)),

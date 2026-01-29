@@ -16,7 +16,13 @@ class TernProtectsContinuityLandlordScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/welcome-to-tern');
+            }
+          },
         ),
         actions: [
           TextButton(
@@ -58,7 +64,7 @@ class TernProtectsContinuityLandlordScreen extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () => context.push('/onboarding/create-account-landlord'),
+                onPressed: () => context.push('/app/landlord/clear-exits'),
                 icon: const Icon(Icons.arrow_forward, color: Color(0xFF0F756A)),
                 label: const Text('Next', style: TextStyle(color: Color(0xFF0F756A), fontWeight: FontWeight.w800)),
                 style: ElevatedButton.styleFrom(

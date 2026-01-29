@@ -23,30 +23,68 @@ class LeaseClosureLandlordScreen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/transition/landlord');
+            }
+          },
         ),
         title: const Text('Lease Closure'),
         centerTitle: true,
       ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 120),
-            child: Column(
-              children: [
-                const SizedBox(height: 12),
-                _Header(),
-                const Divider(height: 24, thickness: 1, color: Color(0xFFE5E9E8)),
-                _SettlementCard(),
-                const SizedBox(height: 20),
-                _Actions(),
-                const SizedBox(height: 24),
-              ],
-            ),
-          ),
-          const _BottomNav(),
-        ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 24),
+        child: Column(
+          children: [
+            const SizedBox(height: 12),
+            _Header(),
+            const Divider(height: 24, thickness: 1, color: Color(0xFFE5E9E8)),
+            _SettlementCard(),
+            const SizedBox(height: 20),
+            _Actions(),
+            const SizedBox(height: 24),
+          ],
+        ),
       ),
+      bottomNavigationBar: const _LandlordBottomNav(selectedIndex: 2),
+    );
+  }
+}
+class _LandlordBottomNav extends StatelessWidget {
+  const _LandlordBottomNav({this.selectedIndex = 0});
+
+  final int selectedIndex;
+
+  void _onTap(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        context.go('/app/landlord/home');
+        break;
+      case 1:
+        context.go('/app/landlord/portfolio');
+        break;
+      case 2:
+        context.go('/app/landlord/decisions');
+        break;
+      case 3:
+        context.go('/app/landlord/profile');
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return NavigationBar(
+      selectedIndex: selectedIndex,
+      onDestinationSelected: (index) => _onTap(context, index),
+      destinations: const [
+        NavigationDestination(icon: Icon(Icons.home_filled), label: 'Home'),
+        NavigationDestination(icon: Icon(Icons.apartment), label: 'Portfolio'),
+        NavigationDestination(icon: Icon(Icons.rule), label: 'Decisions'),
+        NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
+      ],
     );
   }
 }
@@ -255,55 +293,6 @@ class _Actions extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  const _BottomNav();
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Color(0xFFE5E9E8))),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            _NavItem(icon: Icons.grid_view, label: 'Home'),
-            _NavItem(icon: Icons.real_estate_agent, label: 'Properties', active: true),
-            _NavItem(icon: Icons.account_balance_wallet, label: 'Wallet'),
-            _NavItem(icon: Icons.person, label: 'Profile'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _NavItem extends StatelessWidget {
-  const _NavItem({required this.icon, required this.label, this.active = false});
-  final IconData icon;
-  final String label;
-  final bool active;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = active ? _lcPrimary : const Color(0xFF9CA3AF);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color, size: 22),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: active ? FontWeight.w700 : FontWeight.w500)),
-      ],
     );
   }
 }

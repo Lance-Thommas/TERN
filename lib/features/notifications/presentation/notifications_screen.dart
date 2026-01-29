@@ -24,52 +24,47 @@ class NotificationsScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Stack(
+      body: ListView(
+        padding: const EdgeInsets.only(bottom: 24),
         children: [
-          ListView(
-            padding: const EdgeInsets.only(bottom: 90),
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
-                child: Text(
-                  'Archive of rental law changes and news relevant to your lease region.',
-                  style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),
-                ),
-              ),
-              _FilterChips(),
-              const SizedBox(height: 10),
-              _NewsCard(
-                date: 'Jan 1, 2024',
-                relevanceLabel: 'High Relevance',
-                relevanceColor: _notifPrimary,
-                title: 'Rent Control Cap Adjustment 2024',
-                body: 'Maximum allowable rent increase for stabilized units set to 3% for 2024.',
-                impact: 'Yes. Your renewal offer must not exceed a 3% increase if you choose to renew in 2024.',
-                onTap: () => context.push('/app/notifications/update'),
-              ),
-              _NewsCard(
-                date: 'Oct 15, 2023',
-                relevanceLabel: 'FYI Only',
-                relevanceColor: const Color(0xFF9CA3AF),
-                title: 'Winter Heating Ordinance',
-                body: 'Landlords must maintain a minimum indoor temperature during the heating season.',
-                impact: 'Partially. Relevant only if you pay for utilities directly.',
-                onTap: () => context.push('/app/notifications/update'),
-              ),
-              _NewsCard(
-                date: 'Sep 1, 2023',
-                relevanceLabel: 'Review',
-                relevanceColor: const Color(0xFFF59E0B),
-                title: 'Security Deposit Interest Rates',
-                body: 'New legislation requires interest on security deposits held over 12 months.',
-                impact: 'Yes. Check your account statement to ensure interest is credited.',
-                onTap: () => context.push('/app/notifications/update'),
-              ),
-              const SizedBox(height: 16),
-              _Pagination(),
-            ],
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
+            child: Text(
+              'Archive of rental law changes and news relevant to your lease region.',
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),
+            ),
           ),
-          const _BottomNav(),
+          _FilterChips(),
+          const SizedBox(height: 10),
+          _NewsCard(
+            date: 'Jan 1, 2024',
+            relevanceLabel: 'High Relevance',
+            relevanceColor: _notifPrimary,
+            title: 'Rent Control Cap Adjustment 2024',
+            body: 'Maximum allowable rent increase for stabilized units set to 3% for 2024.',
+            impact: 'Yes. Your renewal offer must not exceed a 3% increase if you choose to renew in 2024.',
+            onTap: () => context.push('/app/notifications/update'),
+          ),
+          _NewsCard(
+            date: 'Oct 15, 2023',
+            relevanceLabel: 'FYI Only',
+            relevanceColor: const Color(0xFF9CA3AF),
+            title: 'Winter Heating Ordinance',
+            body: 'Landlords must maintain a minimum indoor temperature during the heating season.',
+            impact: 'Partially. Relevant only if you pay for utilities directly.',
+            onTap: () => context.push('/app/notifications/update'),
+          ),
+          _NewsCard(
+            date: 'Sep 1, 2023',
+            relevanceLabel: 'Review',
+            relevanceColor: const Color(0xFFF59E0B),
+            title: 'Security Deposit Interest Rates',
+            body: 'New legislation requires interest on security deposits held over 12 months.',
+            impact: 'Yes. Check your account statement to ensure interest is credited.',
+            onTap: () => context.push('/app/notifications/update'),
+          ),
+          const SizedBox(height: 16),
+          _Pagination(),
         ],
       ),
     );
@@ -226,55 +221,6 @@ class _Pagination extends StatelessWidget {
           IconButton(onPressed: () {}, icon: const Icon(Icons.chevron_right, color: Colors.grey)),
         ],
       ),
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  const _BottomNav();
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Color(0xFFE5E9E8))),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            _NavItem(icon: Icons.home, label: 'Home'),
-            _NavItem(icon: Icons.search, label: 'Search'),
-            _NavItem(icon: Icons.help, label: 'Help', active: true),
-            _NavItem(icon: Icons.person, label: 'Profile'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _NavItem extends StatelessWidget {
-  const _NavItem({required this.icon, required this.label, this.active = false});
-  final IconData icon;
-  final String label;
-  final bool active;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = active ? _notifPrimary : const Color(0xFF9CA3AF);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color, size: 22),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: active ? FontWeight.w700 : FontWeight.w500)),
-      ],
     );
   }
 }

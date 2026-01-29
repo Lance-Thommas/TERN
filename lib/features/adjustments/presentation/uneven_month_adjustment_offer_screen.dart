@@ -24,7 +24,13 @@ class UnevenMonthAdjustmentOfferScreen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/adjustments');
+            }
+          },
         ),
         title: const Text('Timeline Status'),
         centerTitle: true,
@@ -109,7 +115,7 @@ class UnevenMonthAdjustmentOfferScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => context.push('/app/renewal/window-1'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _unevenPrimary,
                         foregroundColor: Colors.white,
@@ -119,20 +125,6 @@ class UnevenMonthAdjustmentOfferScreen extends StatelessWidget {
                         shadowColor: _unevenPrimary.withValues(alpha: 0.25),
                       ),
                       child: const Text('Yes, keep things smooth', style: TextStyle(fontWeight: FontWeight.w800)),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        side: const BorderSide(color: Color(0xFF6B665C)),
-                        foregroundColor: const Color(0xFF6B665C),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      ),
-                      child: const Text("No thanks, I'll handle it myself", style: TextStyle(fontWeight: FontWeight.w700)),
                     ),
                   ),
                 ],
@@ -152,22 +144,6 @@ class UnevenMonthAdjustmentOfferScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Color(0xFFE5E0D6))),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
-            _BottomItem(icon: Icons.home, label: 'Home', active: false),
-            _BottomItem(icon: Icons.view_timeline, label: 'Timeline', active: true),
-            _BottomItem(icon: Icons.account_balance_wallet, label: 'Wallet', active: false),
-            _BottomItem(icon: Icons.person, label: 'Profile', active: false),
-          ],
-        ),
       ),
     );
   }
@@ -214,22 +190,3 @@ class _BenefitTile extends StatelessWidget {
   }
 }
 
-class _BottomItem extends StatelessWidget {
-  const _BottomItem({required this.icon, required this.label, this.active = false});
-  final IconData icon;
-  final String label;
-  final bool active;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = active ? _unevenPrimary : const Color(0xFF6B665C);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: active ? FontWeight.w700 : FontWeight.w500)),
-      ],
-    );
-  }
-}

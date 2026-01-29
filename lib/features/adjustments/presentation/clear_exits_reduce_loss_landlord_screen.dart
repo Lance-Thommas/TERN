@@ -16,7 +16,13 @@ class ClearExitsReduceLossLandlordScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/landlord/decisions');
+            }
+          },
         ),
       ),
       body: Column(
@@ -43,7 +49,7 @@ class ClearExitsReduceLossLandlordScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => context.push('/onboarding/landlord/property-lease-setup'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _clPrimary,
                       padding: const EdgeInsets.symmetric(vertical: 14),
@@ -163,7 +169,7 @@ class _HeadlineBlock extends StatelessWidget {
         ),
         SizedBox(height: 12),
         Text(
-          'TERN ensures the move-out process is seamless. Protect your asset from vacancy loss and damages with our structured exit protocols.',
+          'Chello ensures the move-out process is seamless. Protect your asset from vacancy loss and damages with our structured exit protocols.',
           textAlign: TextAlign.center,
           style: TextStyle(color: Color(0xCC292E38), height: 1.5),
         ),

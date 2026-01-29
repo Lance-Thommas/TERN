@@ -19,7 +19,13 @@ class ProfileScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/profile');
+            }
+          },
         ),
       ),
       body: Padding(
@@ -34,6 +40,15 @@ class ProfileScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 16),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.savings_outlined),
+              title: const Text('Deposit coverage'),
+              subtitle: const Text('View protections and preview settlement'),
+              onTap: () => context.push('/app/timeline/deposit'),
+            ),
+            const Divider(height: 1),
+            const SizedBox(height: 8),
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.history),

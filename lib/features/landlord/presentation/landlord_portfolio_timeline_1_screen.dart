@@ -25,7 +25,13 @@ class LandlordPortfolioTimeline1Screen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/landlord/portfolio');
+            }
+          },
         ),
         title: const Text('Portfolio'),
         centerTitle: true,
@@ -64,6 +70,7 @@ class LandlordPortfolioTimeline1Screen extends StatelessWidget {
             nextWindow: 'Oct 1 - Oct 5',
             rent: 'AED 2,450.00',
             progressColor: _llAmber,
+            onTap: () => context.push('/app/landlord/clear-exits'),
           ),
           _PropertyCard(
             title: '450 Oak St',
@@ -79,6 +86,8 @@ class LandlordPortfolioTimeline1Screen extends StatelessWidget {
             rent: 'AED 1,800.00',
             progressColor: _llAmber,
             ctaLabel: 'Review Renewal Options',
+            ctaOnTap: () => context.push('/app/renewal/options'),
+            onTap: () => context.push('/app/renewal/options'),
           ),
           _PropertyCard(
             title: '88 Pine Ln',
@@ -93,6 +102,7 @@ class LandlordPortfolioTimeline1Screen extends StatelessWidget {
             rent: 'Paid Sept 1',
             progressColor: Colors.orange,
             showProgressBar: false,
+            onTap: () => context.push('/app/transition/landlord'),
           ),
           const SizedBox(height: 30),
         ],
@@ -153,7 +163,9 @@ class _PropertyCard extends StatelessWidget {
     required this.rent,
     required this.progressColor,
     this.ctaLabel,
+    this.ctaOnTap,
     this.showProgressBar = true,
+    this.onTap,
   });
 
   final String title;
@@ -170,152 +182,161 @@ class _PropertyCard extends StatelessWidget {
   final String rent;
   final Color progressColor;
   final String? ctaLabel;
+  final VoidCallback? ctaOnTap;
   final bool showProgressBar;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF6F5F2),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
           borderRadius: BorderRadius.circular(18),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4))],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF6F5F2),
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4))],
+            ),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(Icons.apartment, color: Color(0xFF5A5F61)),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
-                      const SizedBox(height: 2),
-                      Text(subtitle, style: const TextStyle(color: Color(0xFF6B7280))),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: statusColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    children: [
-                      if (statusLabel == 'Adjusted')
-                        Icon(Icons.circle, color: statusColor, size: 12)
-                      else
-                        Icon(statusLabel == 'Renewal' ? Icons.history_edu : Icons.key, color: statusColor, size: 16),
-                      const SizedBox(width: 6),
-                      Text(statusLabel, style: TextStyle(color: statusColor, fontWeight: FontWeight.w800, fontSize: 12)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            if (alertText != null) ...[
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.orange.shade50,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.orange.shade100),
-                ),
-                child: Text(alertText!, style: const TextStyle(color: Color(0xFF9A4A00))),
-              ),
-            ]
-            else if (banner != null) ...[
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(banner!, style: TextStyle(color: progressColor, fontWeight: FontWeight.w700)),
-                  if (bannerValue != null)
-                    Text(bannerValue!, style: TextStyle(color: progressColor, fontWeight: FontWeight.w700)),
-                ],
-              ),
-            ],
-            if (showProgressBar) ...[
-              const SizedBox(height: 8),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: LinearProgressIndicator(
-                  value: progress,
-                  minHeight: 10,
-                  backgroundColor: const Color(0xFFDCE5E4),
-                  valueColor: AlwaysStoppedAnimation(progressColor),
-                ),
-              ),
-              const SizedBox(height: 6),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(start, style: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 11)),
-                  Text(end, style: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 11)),
-                ],
-              ),
-            ],
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Next Rent Window', style: TextStyle(color: Color(0xFF6B7280), fontSize: 12)),
-                      const SizedBox(height: 2),
-                      Text(nextWindow, style: const TextStyle(fontWeight: FontWeight.w800)),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Monthly Rent', style: TextStyle(color: Color(0xFF6B7280), fontSize: 12)),
-                      const SizedBox(height: 2),
-                      Text(rent, style: const TextStyle(fontWeight: FontWeight.w800)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            if (ctaLabel != null) ...[
-              const SizedBox(height: 12),
-              OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: progressColor,
-                  side: BorderSide(color: progressColor.withValues(alpha: 0.4)),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(ctaLabel!, style: const TextStyle(fontWeight: FontWeight.w800)),
-                    const SizedBox(width: 6),
-                    Icon(Icons.arrow_forward, color: progressColor, size: 18),
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.apartment, color: Color(0xFF5A5F61)),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
+                          const SizedBox(height: 2),
+                          Text(subtitle, style: const TextStyle(color: Color(0xFF6B7280))),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: statusColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: [
+                          if (statusLabel == 'Adjusted')
+                            Icon(Icons.circle, color: statusColor, size: 12)
+                          else
+                            Icon(statusLabel == 'Renewal' ? Icons.history_edu : Icons.key, color: statusColor, size: 16),
+                          const SizedBox(width: 6),
+                          Text(statusLabel, style: TextStyle(color: statusColor, fontWeight: FontWeight.w800, fontSize: 12)),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ],
-          ],
+                if (alertText != null) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.shade50,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.orange.shade100),
+                    ),
+                    child: Text(alertText!, style: const TextStyle(color: Color(0xFF9A4A00))),
+                  ),
+                ]
+                else if (banner != null) ...[
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(banner!, style: TextStyle(color: progressColor, fontWeight: FontWeight.w700)),
+                      if (bannerValue != null)
+                        Text(bannerValue!, style: TextStyle(color: progressColor, fontWeight: FontWeight.w700)),
+                    ],
+                  ),
+                ],
+                if (showProgressBar) ...[
+                  const SizedBox(height: 8),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: LinearProgressIndicator(
+                      value: progress,
+                      minHeight: 10,
+                      backgroundColor: const Color(0xFFDCE5E4),
+                      valueColor: AlwaysStoppedAnimation(progressColor),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(start, style: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 11)),
+                      Text(end, style: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 11)),
+                    ],
+                  ),
+                ],
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Next Rent Window', style: TextStyle(color: Color(0xFF6B7280), fontSize: 12)),
+                          const SizedBox(height: 2),
+                          Text(nextWindow, style: const TextStyle(fontWeight: FontWeight.w800)),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Monthly Rent', style: TextStyle(color: Color(0xFF6B7280), fontSize: 12)),
+                          const SizedBox(height: 2),
+                          Text(rent, style: const TextStyle(fontWeight: FontWeight.w800)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                if (ctaLabel != null) ...[
+                  const SizedBox(height: 12),
+                  OutlinedButton(
+                    onPressed: ctaOnTap ?? onTap,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: progressColor,
+                      side: BorderSide(color: progressColor.withValues(alpha: 0.4)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(ctaLabel!, style: const TextStyle(fontWeight: FontWeight.w800)),
+                        const SizedBox(width: 6),
+                        Icon(Icons.arrow_forward, color: progressColor, size: 18),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );

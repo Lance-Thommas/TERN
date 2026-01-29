@@ -25,7 +25,13 @@ class RenewalWindowDecision2Screen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/timeline');
+            }
+          },
         ),
         title: const Text('Renewal Window Decision 2'),
         centerTitle: true,

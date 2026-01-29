@@ -24,62 +24,63 @@ class RentalUpdateWhatThisMeansForYouScreen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/notifications');
+            }
+          },
         ),
         title: const Text('Rental update (UAE)'),
         centerTitle: true,
       ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 120),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  ShaderMask(
-                    shaderCallback: (bounds) => const LinearGradient(
-                      colors: [_updatePrimary, Color(0xFF0FA6D8)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ).createShader(bounds),
-                    child: const Text('Rental update (UAE)', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800, height: 1.1, color: Colors.white)),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'New RERA regulations have adjusted the required notice period for eviction regarding landlord reclaim in Dubai.',
-                    style: theme.textTheme.titleMedium?.copyWith(color: const Color(0xFF111817), height: 1.5),
-                  ),
-                  const SizedBox(height: 18),
-                  _ImpactCard(),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      onPressed: () => context.go('/app/notifications'),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: const BorderSide(color: Color(0xFFE0E6E5)),
-                        foregroundColor: const Color(0xFF616F6D),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
-                      child: const Text('Dismiss'),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'This is informational. Your contract terms still apply.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Color(0xFF94A3AF), fontSize: 12),
-                  ),
-                ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 24),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              ShaderMask(
+                shaderCallback: (bounds) => const LinearGradient(
+                  colors: [_updatePrimary, Color(0xFF0FA6D8)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds),
+                child: const Text('Rental update (UAE)', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800, height: 1.1, color: Colors.white)),
               ),
-            ),
+              const SizedBox(height: 10),
+              Text(
+                'New RERA regulations have adjusted the required notice period for eviction regarding landlord reclaim in Dubai.',
+                style: theme.textTheme.titleMedium?.copyWith(color: const Color(0xFF111817), height: 1.5),
+              ),
+              const SizedBox(height: 18),
+              _ImpactCard(),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: () => context.go('/app/notifications'),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    side: const BorderSide(color: Color(0xFFE0E6E5)),
+                    foregroundColor: const Color(0xFF616F6D),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  child: const Text('Dismiss'),
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'This is informational. Your contract terms still apply.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Color(0xFF94A3AF), fontSize: 12),
+              ),
+            ],
           ),
-          const _BottomNav(),
-        ],
+        ),
       ),
     );
   }
@@ -148,55 +149,6 @@ class _Point extends StatelessWidget {
         Expanded(
           child: Text(text, style: const TextStyle(color: Color(0xFF111817), height: 1.4, fontWeight: FontWeight.w600)),
         ),
-      ],
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  const _BottomNav();
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Color(0xFFE5E9E8))),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            _NavItem(icon: Icons.home, label: 'Home'),
-            _NavItem(icon: Icons.description, label: 'Leases', active: true),
-            _NavItem(icon: Icons.account_balance_wallet, label: 'Wallet'),
-            _NavItem(icon: Icons.person, label: 'Profile'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _NavItem extends StatelessWidget {
-  const _NavItem({required this.icon, required this.label, this.active = false});
-  final IconData icon;
-  final String label;
-  final bool active;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = active ? _updatePrimary : const Color(0xFF9CA3AF);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color, size: 22),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: active ? FontWeight.w700 : FontWeight.w500)),
       ],
     );
   }

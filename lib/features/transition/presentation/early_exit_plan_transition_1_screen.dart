@@ -24,7 +24,13 @@ class EarlyExitPlanTransition1Screen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/transition/early-exit');
+            }
+          },
         ),
         title: const Text('Plan Transition'),
         centerTitle: true,
@@ -94,7 +100,7 @@ class EarlyExitPlanTransition1Screen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () => context.push('/app/transition/request-flexibility'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _exitPrimary,
                         foregroundColor: Colors.white,

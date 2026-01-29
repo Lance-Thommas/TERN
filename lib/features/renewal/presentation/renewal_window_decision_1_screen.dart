@@ -25,7 +25,13 @@ class RenewalWindowDecision1Screen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/timeline');
+            }
+          },
         ),
         title: const Text('Renewal Window Decision 1'),
         centerTitle: true,
@@ -155,7 +161,7 @@ class _PrimaryCard extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => context.push('/app/renewal/confirm'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _renewPrimary,
                           foregroundColor: Colors.white,
@@ -232,7 +238,7 @@ class _SecondaryCard extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: () {},
+            onPressed: () => context.push('/app/transition/early-exit/step-1'),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 side: const BorderSide(color: _renewPrimary),
@@ -278,7 +284,7 @@ class _ExitCard extends StatelessWidget {
             ),
           ),
           OutlinedButton(
-            onPressed: () {},
+            onPressed: () => context.push('/app/transition/early-exit/step-1'),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               backgroundColor: const Color(0xFFF2F2F0),

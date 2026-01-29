@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 const _psBg = Color(0xFFF6F8F8);
 const _psPrimary = Color(0xFF1EE6D2);
 
-class PropertyAndLeaseSetupLandlordScreen extends StatelessWidget {
-  const PropertyAndLeaseSetupLandlordScreen({super.key});
+class SetupFirstPropertyLandlordScreen extends StatelessWidget {
+  const SetupFirstPropertyLandlordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +16,15 @@ class PropertyAndLeaseSetupLandlordScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/onboarding/landlord/property-lease-setup');
+            }
+          },
         ),
-        title: const Text('Set up property'),
+        title: const Text('Set up first property'),
         centerTitle: true,
       ),
       body: Stack(
@@ -29,16 +35,16 @@ class PropertyAndLeaseSetupLandlordScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 12),
+                children: const [
+                  SizedBox(height: 12),
                   _Header(),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   _StepCard(title: 'Property basics', body: 'Address, unit, and photos for verification.'),
                   _StepCard(title: 'Lease terms', body: 'Rent, notice periods, deposits, and grace rules.'),
                   _StepCard(title: 'Tenant invite', body: 'Share access so tenants can see continuity protections.'),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   _UploadBox(),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                 ],
               ),
             ),
@@ -90,6 +96,8 @@ class PropertyAndLeaseSetupLandlordScreen extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
+  const _Header();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -97,7 +105,7 @@ class _Header extends StatelessWidget {
       children: const [
         Text('Your first property', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
         SizedBox(height: 8),
-        Text('Set up the lease and invite your tenant to unlock continuity protections.', style: TextStyle(color: Color(0xFF5F6B6A), height: 1.4)),
+        Text('Finalize details and invite your tenant to unlock continuity protections.', style: TextStyle(color: Color(0xFF5F6B6A), height: 1.4)),
       ],
     );
   }
@@ -147,6 +155,8 @@ class _StepCard extends StatelessWidget {
 }
 
 class _UploadBox extends StatelessWidget {
+  const _UploadBox();
+
   @override
   Widget build(BuildContext context) {
     return Container(

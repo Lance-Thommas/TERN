@@ -24,7 +24,13 @@ class EarlyExitPlanTransition2Screen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/transition/early-exit');
+            }
+          },
         ),
         title: const Text('Plan Transition'),
         centerTitle: true,

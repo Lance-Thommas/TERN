@@ -136,7 +136,7 @@ const _sections = [
       _NavItem('Adjustments hub', '/app/adjustments'),
       _NavItem('Uneven month offer', '/app/adjustments/offer'),
       _NavItem('Uneven month status', '/app/adjustments/uneven-month'),
-      _NavItem('Clear exits reduce loss', '/app/adjustments/clear-exits'),
+      _NavItem('Clear exits reduce loss', '/app/landlord/clear-exits'),
     ],
   ),
   _NavSection(
@@ -161,8 +161,7 @@ const _sections = [
   _NavSection(
     'Landlord Portfolio',
     [
-      _NavItem('Portfolio hub', '/app/landlord/portfolio'),
-      _NavItem('Portfolio timeline 1', '/app/landlord/portfolio/timeline-1'),
+      _NavItem('Portfolio tab', '/app/landlord/portfolio'),
       _NavItem('Portfolio timeline 2', '/app/landlord/portfolio/timeline-2'),
       _NavItem('Tenancy history (LL)', '/app/landlord/history'),
     ],

@@ -24,7 +24,13 @@ class RentalUpdateImpactLandlordScreen extends StatelessWidget {
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.go('/dev'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/app/notifications');
+            }
+          },
         ),
         title: const Text('Rental Update (Landlord)'),
         centerTitle: true,
